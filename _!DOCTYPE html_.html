@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Checklist Vehicular</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 12px;
+      background: url('https://www.dropbox.com/scl/fi/2vf8jzzlh7xq3h07ftu4l/v602-nunoon-05-rippednotes.jpg?rlkey=yr74qjf6dfcbvs1war1lsl3q3&dl=1') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      color: #004d40; /* turquesa oscuro */
+      padding: 10px 0 40px;
+    }
+    #logo {
+      margin: 15px 0;
+      width: 200px;
+      height: 200px;
+      background: url('https://www.dropbox.com/scl/fi/0vwf6mmktfhsxblaicpno/panchos-logo.png?rlkey=io7zuzq7z3m3ptkj1hzmi3go&dl=1') no-repeat center center;
+      background-size: contain;
+    }
+
+    form {
+      background: rgba(255 255 255 / 0.9);
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 77, 64, 0.5);
+      max-width: 700px;
+      width: 95%;
+      padding: 20px 30px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+      color: #00796b;
+      user-select: none;
+    }
+    .section {
+      margin-top: 20px;
+      border-top: 2px solid #00796b;
+      padding-top: 15px;
+    }
+
+    label {
+      font-weight: 600;
+      margin-right: 8px;
+      user-select: none;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    select, input[type=text], input[type=number], textarea {
+      border: 2px solid #004d40;
+      border-radius: 12px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-family: 'Quicksand', sans-serif;
+      outline: none;
+      flex-grow: 1;
+      min-width: 150px;
+      margin-left: 10px;
+      box-sizing: border-box;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 30px;
+      max-height: 60px;
+    }
+
+    input[readonly] {
+      background-color: #cfd8dc;
+      cursor: not-allowed;
+    }
+
+    /* Botones grande redondeados */
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      margin-left: 10px;
+    }
+
+    button.bueno, button.malo {
+      border: none;
+      border-radius: 25px;
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      min-width: 70px;
+      user-select: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      transition: transform 0.15s ease;
+    }
+    button.bueno {
+      background-color: #4caf50;
+    }
+    button.malo {
+      background-color: #e53935;
+    }
+    button.bueno:hover {
+      background-color: #388e3c;
+      transform: scale(1.1);
+    }
+    button.malo:hover {
+      background-color: #b71c1c;
+      transform: scale(1.1);
+    }
+
+    /* Inputs observaciones redondeados */
+    input.obs {
+      width: 140px;
+      margin-left: 10px;
+      border-radius: 12px;
+      border: 2px solid #004d40;
+      padding: 6px 8px;
+      font-size: 12px;
+    }
+
+    /* Inputs fotos */
+    input[type=file] {
+      border-radius: 12px;
+      border: 2px solid #004d40;
+      padding: 6px 8px;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    /* Contenedor tabla para notas */
+    .table-notes {
+      border: 2px solid #00796b;
+      border-radius: 12px;
+      padding: 15px;
+      background: #e0f2f1;
+      box-sizing: border-box;
+    }
+
+    /* Fecha y hora */
+    .datetime {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .datetime > div {
+      flex-basis: 48%;
+    }
+
+    /* Submit */
+    button.submit-btn {
+      width: 100%;
+      margin-top: 20px;
+      font-size: 16px;
+      background-color: #00796b;
+      color: white;
+      border-radius: 25px;
+      padding: 12px;
+      cursor: pointer;
+      border: none;
+      font-weight: 700;
+      user-select: none;
+      box-shadow: 0 3px 7px rgba(0, 121, 107, 0.7);
+      transition: background-color 0.3s ease;
+    }
+    button.submit-btn:hover {
+      background-color: #004d40;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .btn-group {
+        margin-left: 0;
+        margin-top: 6px;
+      }
+      input.obs {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="logo" title="Pancho's Deli Market"></div>
+
+  <form id="checklistForm">
+
+    <div class="datetime">
+      <div>
+        <label for="fecha">📅 Fecha:</label>
+        <input type="text" id="fecha" name="fecha" readonly />
+      </div>
+      <div>
+        <label for="hora">⏰ Hora:</label>
+        <input type="text" id="hora" name="hora" readonly />
+      </div>
+    </div>
+
+    <div class="row">
+      <label for="tipoVehiculo">🚗 Tipo de Vehículo:</label>
+      <select id="tipoVehiculo" name="tipoVehiculo" required>
+        <option value="">-- Seleccione --</option>
+        <option value="Van">Van</option>
+        <option value="Tornado">Tornado</option>
+        <option value="Avanza">Avanza</option>
+        <option value="Nissan">Nissan</option>
+        <option value="Isuzu">Isuzu</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <label for="placa">🛻 Placa:</label>
+      <input type="text" id="placa" name="placa" readonly required />
+    </div>
+
+    <div class="row">
+      <label for="kilometraje">🛣️ Kilometraje:</label>
+      <input type="number" id="kilometraje" name="kilometraje" min="0" required />
+    </div>
+
+    <div class="row">
+      <label for="nombreConductor">👤 Nombre del Conductor:</label>
+      <input type="text" id="nombreConductor" name="nombreConductor" required />
+    </div>
+
+    <div class="row">
+      <label for="puesto">💼 Puesto:</label>
+      <input type="text" id="puesto" name="puesto" required />
+    </div>
+
+    <!-- Sección Luces -->
+    <div class="section">
+      <h2>💡 Luces</h2>
+      <div class="table-notes">
+        ${[
+          "Luz Baja",
+          "Luz Reversa",
+          "Luz Freno",
+          "Intermitentes",
+          "Luces Traseras"
+        ].map(item => `
+          <div class="row">
+            <label>${item}:</label>
+            <div class="btn-group" role="group" aria-label="${item} evaluación">
+              <button type="button" class="bueno" data-name="${item}">Bueno ✅</button>
+              <button type="button" class="malo" data-name="${item}">Malo ❌</button>
+            </div>
+            <input type="text" class="obs" placeholder="Observaciones" data-name="${item}-obs" />
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- Sección Accesorios -->
+    <div class="section">
+      <h2>🧰 Accesorios</h2>
+      <div class="table-notes">
+        ${[
+          "Extintor",
+          "Triángulos",
+          "Cinturón",
+          "Parabrisas",
+          "Batería"
+        ].map(item => `
+          <div class="row">
+            <label>${item}:</label>
+            <div class="btn-group" role="group" aria-label="${item} evaluación">
+              <button type="button" class="bueno" data-name="${item}">Bueno ✅</button>
+              <button type="button" class="malo" data-name="${item}">Malo ❌</button>
+            </div>
+            <input type="text" class="obs" placeholder="Observaciones" data-name="${item}-obs" />
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- Sección Neumáticos -->
+    <div class="section">
+      <h2>🛞 Neumáticos</h2>
+      <div class="table-notes">
+        ${[
+          "Neumáticos Delanteros",
+          "Neumáticos Traseros",
+          "Alineado",
+          "Carrocería"
+        ].map(item => `
+          <div class="row">
+            <label>${item}:</label>
+            <div class="btn-group" role="group" aria-label="${item} evaluación">
+              <button type="button" class="bueno" data-name="${item}">Bueno ✅</button>
+              <button type="button" class="malo" data-name="${item}">Malo ❌</button>
+            </div>
+            <input type="text" class="obs" placeholder="Observaciones" data-name="${item}-obs" />
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- Sección General -->
+    <div class="section">
+      <h2>🌊 General</h2>
+      <div class="table-notes">
+        ${[
+          "Agua",
+          "Aceite"
+        ].map(item => `
+          <div class="row">
+            <label>${item}:</label>
+            <div class="btn-group" role="group" aria-label="${item} evaluación">
+              <button type="button" class="bueno" data-name="${item}">Bueno ✅</button>
+              <button type="button" class="malo" data-name="${item}">Malo ❌</button>
+            </div>
+            <input type="text" class="obs" placeholder="Observaciones" data-name="${item}-obs" />
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="row">
+      <label for="fotos">📷 Cargar Fotos (máx 3):</label>
+      <input type="file" id="fotos" name="fotos" accept="image/*" multiple />
+    </div>
+
+    <button type="submit" class="submit-btn">Enviar Checklist 📝</button>
+  </form>
+
+  <script>
+    // Mapeo placas según vehículo
+    const placas = {
+      "Van": "JG43921",
+      "Nissan": "JR69401",
+      "Tornado": "JX91123",
+      "Avanza": "JSS4862",
+      "Isuzu": "JY19138"
+    };
+
+    // Al cargar la página
+    window.onload = () => {
+      // Fecha y hora actual
+      const fechaInput = document.getElementById('fecha');
+      const horaInput = document.getElementById('hora');
+
+      const now = new Date();
+      fechaInput.value = now.toLocaleDateString('es-MX');
+      horaInput.value = now.toLocaleTimeString('es-MX', {hour: '2-digit', minute:'2-digit'});
+
+      // Actualizar placa al seleccionar vehículo
+      const tipoSelect = document.getElementById('tipoVehiculo');
+      const placaInput = document.getElementById('placa');
+
+      tipoSelect.addEventListener('change', () => {
+        placaInput.value = placas[tipoSelect.value] || '';
+      });
+
+      // Manejo botones bueno/malo para togglear selección
+      const buttonsBueno = document.querySelectorAll('button.bueno');
+      const buttonsMalo = document.querySelectorAll('button.malo');
+
+      function toggleButton(button, grupoNombre) {
+        const siblings = document.querySelectorAll(`button[data-name="${grupoNombre}"]`);
+        siblings.forEach(btn => {
+          if(btn !== button) btn.classList.remove('selected');
+        });
+        button.classList.toggle('selected');
+      }
+
+      buttonsBueno.forEach(btn => {
+        btn.addEventListener('click', () => toggleButton(btn, btn.dataset.name));
+      });
+      buttonsMalo.forEach(btn => {
+        btn.addEventListener('click', () => toggleButton(btn, btn.dataset.name));
+      });
+
+      // Enviar formulario
+      const form = document.getElementById('checklistForm');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Validaciones básicas
+        if (!tipoSelect.value) {
+          alert('Seleccione un tipo de vehículo');
+          return;
+        }
+        if (!placaInput.value) {
+          alert('La placa no está definida');
+          return;
+        }
+        if (!form.kilometraje.value) {
+          alert('Ingrese el kilometraje');
+          return;
+        }
+        if (!form.nombreConductor.value.trim()) {
+          alert('Ingrese el nombre del conductor');
+          return;
+        }
+        if (!form.puesto.value.trim()) {
+          alert('Ingrese el puesto');
+          return;
+        }
+
+        // Recolectar datos del checklist
+        const checklistData = {
+          fecha: form.fecha.value,
+          hora: form.hora.value,
+          tipoVehiculo: tipoSelect.value,
+          placa: placaInput.value,
+          kilometraje: form.kilometraje.value,
+          nombreConductor: form.nombreConductor.value.trim(),
+          puesto: form.puesto.value.trim(),
+          items: {},
+          observaciones: {},
+          fotos: []
+        };
+
+        // Para cada item (botones)
+        const allButtons = [...document.querySelectorAll('button.bueno, button.malo')];
+        const itemsSet = new Set(allButtons.map(b => b.dataset.name));
+        itemsSet.forEach(itemName => {
+          const buenoBtn = document.querySelector(`button.bueno[data-name="${itemName}"]`);
+          const maloBtn = document.querySelector(`button.malo[data-name="${itemName}"]`);
+
+          if(buenoBtn.classList.contains('selected')) checklistData.items[itemName] = 'Bueno';
+          else if(maloBtn.classList.contains('selected')) checklistData.items[itemName] = 'Malo';
+          else checklistData.items[itemName] = 'No evaluado';
+
+          // Observaciones
+          const obsInput = document.querySelector(`input.obs[data-name="${itemName}-obs"]`);
+          checklistData.observaciones[itemName] = obsInput ? obsInput.value.trim() : '';
+        });
+
+        // Fotos
+        const fotosInput = form.fotos;
+        if (fotosInput.files.length > 3) {
+          alert('Máximo 3 fotos permitidas');
+          return;
+        }
+        checklistData.fotos = [...fotosInput.files];
+
+        // Enviar datos a Apps Script
+        try {
+          const formData = new FormData();
+
+          // Agregar JSON con todos los datos menos fotos
+          formData.append('checklist', JSON.stringify(checklistData));
+
+          // Agregar fotos
+          for(let i=0; i < fotosInput.files.length; i++) {
+            formData.append('photos', fotosInput.files[i]);
+          }
+
+          // Petición POST a Apps Script
+          const response = await fetch('<?= ScriptApp.getService().getUrl() ?>', {
+            method: 'POST',
+            body: formData
+          });
+          const result = await response.json();
+
+          if(result.status === 'success') {
+            alert('Checklist enviado correctamente ✅');
+            form.reset();
+            placaInput.value = '';
+            // Limpiar selección botones
+            allButtons.forEach(btn => btn.class
